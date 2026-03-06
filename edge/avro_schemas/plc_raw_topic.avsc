@@ -1,0 +1,58 @@
+{
+  "type": "record",
+  "name": "PlcEventRaw",
+  "namespace": "smartfactory.edge.plc",
+  "doc": "Raw PLC event captured by Edge, sent to Kafka. Represents the full equipment state at a single timestamp.",
+  "fields": [
+    {
+      "name": "timestamp",
+      "type": "string",
+      "doc": "ISO8601 timestamp when the Edge read the PLC tags"
+    },
+    {
+      "name": "equipmentId",
+      "type": "string",
+      "doc": "Identifier of the equipment (e.g., CNC_01, Conveyor_01, Line_01)"
+    },
+    {
+      "name": "tags",
+      "type": {
+        "type": "record",
+        "name": "Tags",
+        "doc": "Collection of all tag values for the equipment at this timestamp",
+        "fields": [
+          {
+            "name": "OperationState",
+            "type": "int",
+            "doc": "Current operation state of the equipment (e.g., Idle, Run, Hold)"
+          },
+          {
+            "name": "Mode",
+            "type": "int",
+            "doc": "Current mode of the equipment (e.g., Auto, Manual, Setup)"
+          },
+          {
+            "name": "PowerState",
+            "type": "int",
+            "doc": "Current power state of the equipment (e.g., On, Off)"
+          },
+          {
+            "name": "ErrorCode",
+            "type": "int",
+            "doc": "Current error code if any; 0 means no error"
+          },
+          {
+            "name": "AlarmCode",
+            "type": "int",
+            "doc": "Current alarm code if any; 0 means no active alarms"
+          },
+          {
+            "name": "Estop",
+            "type": "int",
+            "doc": "Emergency stop state; 1 if active, 0 if not"
+          }
+        ]
+      }
+    }
+  ]
+}
