@@ -1,0 +1,516 @@
+// ────────── Edge PLC Raw Data (직렬화 전 샘플) ──────────
+// 이 데이터는 Edge에서 읽은 PLC Tag 값을 사람이 보기 편하게 JSON으로 표현한 예시입니다.
+// 실제 직렬화 전 원시 데이터는 바이너리 또는 PLC 타입 그대로 존재하며, 
+// Kafka로 전송될 때 Avro 스키마 기준으로 직렬화됩니다.
+
+{
+ "timestamp":"2026-03-03T08:00:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:01Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 시작 (cycle time: 150초)
+{
+ "timestamp":"2026-03-03T08:00:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:11Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// cnc 가공완료
+{
+ "timestamp":"2026-03-03T08:02:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// handling time 10초
+{
+ "timestamp":"2026-03-03T08:02:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Conveyor + Vision 검사 완료 cycle time : 90초
+{
+ "timestamp":"2026-03-03T08:04:10Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":1,
+   "GoodCount":1,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:05:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:05:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:06:50Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":2,
+   "GoodCount":2,
+   "RejectCount":0
+ }
+}
+// 3번째 제품 가공 중 Tool Change Required (AlarCode=11) 알람 on 
+// mes 에서 3번째 제품부터 격리조치 필요
+{
+ "timestamp":"2026-03-03T08:07:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:08:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:08:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// Tool Change Required 알람이 발생 했지만, 권고알람이며 알람 발생 후에 바로 vision 검사에서 Reject가 나오지는 않음
+{
+ "timestamp":"2026-03-03T08:09:30Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":3,
+   "GoodCount":3,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:10:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:10:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:12:10Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":4,
+   "GoodCount":4,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:13:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:13:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// tool change required 알람이 울렸지만, vision 검사에서 계속해서 Good 제품이 나오는 상황
+{
+ "timestamp":"2026-03-03T08:14:50Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":5,
+   "GoodCount":5,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:16:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:16:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// vision 검사 완료 후 Reject 확인
+{
+ "timestamp":"2026-03-03T08:17:30Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":6,
+   "GoodCount":5,
+   "RejectCount":1
+ }
+}
+{
+ "timestamp":"2026-03-03T08:18:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:18:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:20:10Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":7,
+   "GoodCount":6,
+   "RejectCount":1
+ }
+}
+{
+ "timestamp":"2026-03-03T08:21:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:21:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:22:50Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":8,
+   "GoodCount":6,
+   "RejectCount":2
+ }
+}
+{
+ "timestamp":"2026-03-03T08:24:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:24:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// Reject 폭증
+{
+ "timestamp":"2026-03-03T08:25:30Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":9,
+   "GoodCount":6,
+   "RejectCount":3
+ }
+}
+{
+ "timestamp":"2026-03-03T08:26:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:26:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:28:10Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":10,
+   "GoodCount":6,
+   "RejectCount":4
+ }
+}
+// cycle stop 요청 -> 현재 가공중이 CNC cycle 종료 후 자동 HOLD/MANUAL
+{
+ "timestamp":"2026-03-03T08:29:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// CNC HOLD/MANUAL -> 작업자 tool change 시작 (예상 소요시간 3분)
+{
+ "timestamp":"2026-03-03T08:29:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":3,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:30:50Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":11,
+   "GoodCount":6,
+   "RejectCount":5
+ }
+}
+// tool change 완료 후, cnc 시험가공 대기상황. 알람해제
+{
+ "timestamp":"2026-03-03T08:32:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 시험가공 시작 (Run/Manual 은 생산시간 포함x)
+{
+ "timestamp":"2026-03-03T08:32:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:35:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 시험가공완료 후 대기상태
+{
+ "timestamp":"2026-03-03T08:35:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 시험가공완료 후 품질 Good 확인 
+// raw 의 Count는 신뢰도 x
+// mes에서 processed topic의 deltaTotal 이벤트의 누적을 계산해서 총 생산량 확인 (생산시간 안의 가공만 인정)
+{
+ "timestamp":"2026-03-03T08:36:40Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":12,
+   "GoodCount":7,
+   "RejectCount":5
+ }
+}
+// 다시 생산 시작
+{
+ "timestamp":"2026-03-03T08:37:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}

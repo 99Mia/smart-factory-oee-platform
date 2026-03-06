@@ -1,0 +1,274 @@
+// ────────── Edge PLC Raw Data (직렬화 전 샘플) ──────────
+// 이 데이터는 Edge에서 읽은 PLC Tag 값을 사람이 보기 편하게 JSON으로 표현한 예시입니다.
+// 실제 직렬화 전 원시 데이터는 바이너리 또는 PLC 타입 그대로 존재하며, 
+// Kafka로 전송될 때 Avro 스키마 기준으로 직렬화됩니다.
+
+{
+ "timestamp":"2026-03-03T08:00:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:01Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:11Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 시작 (cycle time: 150초)
+{
+ "timestamp":"2026-03-03T08:00:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:21Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 완료
+{
+ "timestamp":"2026-03-03T08:02:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Handling Time 10초
+{
+ "timestamp":"2026-03-03T08:03:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Conveyor + Vision 검사 완료 cycle time : 90초
+{
+ "timestamp":"2026-03-03T08:04:20Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":1,
+   "GoodCount":1,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:05:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:05:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:07:00Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":2,
+   "GoodCount":2,
+   "RejectCount":0
+ }
+}
+// 3번째 제품 CNC 가공 중 Tool Change Warning (AlarmCode 11) 발생 -> MES 에서 시간 구간 기반 격리 조치 필요
+{
+ "timestamp":"2026-03-03T08:07:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// 8시 8분 0초 작업자 Cycle Stop 요청 (현재 진행 중인 CNC 가공완료 후 자동 HOLD/MANUAL)
+// 8시 8분 10초 CNC 가공완료
+{
+ "timestamp":"2026-03-03T08:08:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+// CNC 머신 HOLD/MANUAL, 작업자 Tool Change 시작 (예상 소요시간 3분)
+{
+ "timestamp":"2026-03-03T08:08:12Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":3,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":11,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:09:40Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":3,
+   "GoodCount":3,
+   "RejectCount":0
+ }
+}
+// Tool Change 완료 후 알람 해제상태, 시험가공 시작 전 대기상태
+{
+ "timestamp":"2026-03-03T08:11:12Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 시험가공 시작 (Manual 라서 생산시간으로 보지 않음)
+{
+ "timestamp":"2026-03-03T08:11:22Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 시험가공 완료
+{
+ "timestamp":"2026-03-03T08:13:52Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 시험가공 후 대기 상태
+{
+ "timestamp":"2026-03-03T08:14:02Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 시험가공 완료 (Line_01 누적 TotalCount = 4, MES에서는 필요 시 감산)
+{
+ "timestamp":"2026-03-03T08:15:22Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":4,
+   "GoodCount":4,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:16:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+
+
+
+

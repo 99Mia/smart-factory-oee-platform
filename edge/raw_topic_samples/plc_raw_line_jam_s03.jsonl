@@ -1,0 +1,371 @@
+// ────────── Edge PLC Raw Data (직렬화 전 샘플) ──────────
+// 이 데이터는 Edge에서 읽은 PLC Tag 값을 사람이 보기 편하게 JSON으로 표현한 예시입니다.
+// 실제 직렬화 전 원시 데이터는 바이너리 또는 PLC 타입 그대로 존재하며, 
+// Kafka로 전송될 때 Avro 스키마 기준으로 직렬화됩니다.
+
+{
+ "timestamp":"2026-03-03T08:00:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:01Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":3,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:11Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 시작 (cycle time: 150초)
+{
+ "timestamp":"2026-03-03T08:00:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:00:21Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 완료
+{
+ "timestamp":"2026-03-03T08:02:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Handling Time 10초
+{
+ "timestamp":"2026-03-03T08:03:00Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Conveyor + Vision 검사 완료 cycle time : 90초
+{
+ "timestamp":"2026-03-03T08:04:20Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":1,
+   "GoodCount":1,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:05:30Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 3번째 제품 CNC 가공 시작
+{
+ "timestamp":"2026-03-03T08:05:40Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:07:00Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":2,
+   "GoodCount":2,
+   "RejectCount":0
+ }
+}
+// Micro Stop 알람 발생 (AlarmCode 20)
+{
+ "timestamp":"2026-03-03T08:07:20Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":20,
+   "Estop":0
+ }
+}
+// 알람발생 2초 후 Micro Stop (IDLE)
+{
+ "timestamp":"2026-03-03T08:07:22Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":20,
+   "Estop":0
+ }
+}
+// 3초간 Micro Stop 후 자동복구, AlarmCode 20 off
+{
+ "timestamp":"2026-03-03T08:07:25Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Micro Stop 알람 발생 (AlarmCode 20)
+{
+ "timestamp":"2026-03-03T08:07:40Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":20,
+   "Estop":0
+ }
+}
+// 알람발생 2초 후 Micro Stop (IDLE)
+{
+ "timestamp":"2026-03-03T08:07:42Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":20,
+   "Estop":0
+ }
+}
+// 4초간 Micro Stop 후 자동복구, AlarmCode 20 off
+{
+ "timestamp":"2026-03-03T08:07:46Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 3번째 제품 CNC 가공 완료
+{
+ "timestamp":"2026-03-03T08:08:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":4,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Jam Warning 알람 발생 (AlarmCode 21)
+// Jam Stop(22) 발생 시 동시에 Jam Warning(21) 자동 종료.
+// Warning 단계에서 Stop 단계로 승격 되었으며,
+// 상위 Severity Alarm 활성화에 따라 하위 Alarm을 동시 Clear 처리.
+// Alarm Lifecycle 정합성 및 중복 Active 상태 방지를 위한 처리.
+{
+ "timestamp":"2026-03-03T08:08:11Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":21,
+   "Estop":0
+ }
+}
+// 4번째 제품 CNC 가공 시작
+{
+ "timestamp":"2026-03-03T08:08:20Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Jam Stop 알람 발생 (AlarmCode 22) -> Flow 완전정지
+{
+ "timestamp":"2026-03-03T08:09:10Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":3,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":22,
+   "Estop":0
+ }
+}
+// Conveyor HOLD/MANUAL 변경 -> 작업자 Jam 제거 시작 (예상소요시간 5분)
+{
+ "timestamp":"2026-03-03T08:10:00Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":3,
+   "Mode":2,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":22,
+   "Estop":0
+ }
+}
+// 4번째 제품 CNC 가공 완료 
+{
+ "timestamp":"2026-03-03T08:10:50Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Conveyor의 Jam Stop으로 인해 CNC 자동 IDLE 상태
+{
+ "timestamp":"2026-03-03T08:10:52Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":2,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// Jam 제거 완료 후 컨베이어 재개 (RUN/AUTO), AlarmCode 22 off
+{
+ "timestamp":"2026-03-03T08:15:00Z",
+ "equipmentId":"Conveyor_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// CNC 가공 재개
+{
+ "timestamp":"2026-03-03T08:15:10Z",
+ "equipmentId":"CNC_01",
+ "tags":{
+   "OperationState":1,
+   "Mode":1,
+   "PowerState":1,
+   "ErrorCode":0,
+   "AlarmCode":0,
+   "Estop":0
+ }
+}
+// 08:09:10 Conveyor Jam Stop (AlarmCode 22) 발생.
+// Conveyor가 HOLD 상태로 전환되면서 Line Flow가 완전히 차단됨.
+// 해당 시점에 CNC에서 가공 완료된 제품은 Discharge 불가 상태로 Blocked 발생.
+// 제품은 Conveyor 상에서 정체되며 Vision 검사 공정 진입이 지연됨.
+// Jam 제거 후 Conveyor가 RUN 상태로 복귀하면서
+// 체류 중이던 제품의 Vision 검사 프로세스가 정상 재개됨.
+{
+ "timestamp":"2026-03-03T08:15:50Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":3,
+   "GoodCount":3,
+   "RejectCount":0
+ }
+}
+{
+ "timestamp":"2026-03-03T08:16:40Z",
+ "equipmentId":"Line_01",
+ "tags":{
+   "TotalCount":4,
+   "GoodCount":4,
+   "RejectCount":0
+ }
+}
