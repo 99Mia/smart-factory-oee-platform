@@ -1,0 +1,22 @@
+Equipment,Code Type,Code,Meaning,Downtime Category,Severity
+CNC_01,Alarm,10,Maintenance Required,Planned Maintenance,Medium
+CNC_01,Alarm,11,Tool Change Required,Setup / Changeover,Medium
+CNC_01,Alarm,12,Coolant Low,Process Delay,Low
+CNC_01,Alarm,13,Door Open,Safety Stop,High
+CNC_01,Alarm,99,Other Alarm,Unknown,Medium
+CNC_01,Error,100,Servo Fault,Mechanical Failure,High
+CNC_01,Error,101,Overload,Electrical / Process,High
+CNC_01,Error,102,Overheat,Process / Thermal,High
+CNC_01,Error,103,Spindle Fault,Mechanical Failure,High
+CNC_01,Error,104,Axis Error,Mechanical Failure,High
+CNC_01,Error,999,Unknown Error,Unknown,High
+Conveyor_01,Alarm,20,Minor Delay / Micro Stop,Minor Stop,Low
+Conveyor_01,Alarm,21,Jam Warning,Material Flow Issue,Medium
+Conveyor_01,Alarm,22,Jam Stop,Material Flow Issue,High
+Conveyor_01,Alarm,99,Other Alarm,Unknown,Medium
+Conveyor_01,Error,200,Motor Fault,Mechanical Failure,High
+Conveyor_01,Error,201,Overcurrent,Electrical / Process,High
+Conveyor_01,Error,202,Sensor Failure,Material Flow Issue,Medium
+Conveyor_01,Error,203,Drive Fault,Mechanical Failure,High
+Conveyor_01,Error,999,Unknown Error,Unknown,High
+
