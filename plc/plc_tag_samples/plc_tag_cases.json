@@ -1,0 +1,24 @@
+{
+  "CNC_01": {
+    "OperationState": [0, 1, 2, 3, 4, 5],
+    "Mode": [0, 1, 2, 3, 4],
+    "PowerState": [0, 1],
+    "ErrorCode": [0, 100, 101, 102, 103, 104, 999],
+    "AlarmCode": [0, 10, 11, 12, 13, 99],
+    "Estop": [0, 1]
+  },
+  "Conveyor_01": {
+    "OperationState": [0, 1, 2, 3, 4, 5],
+    "Mode": [0, 1, 2, 3, 4],
+    "PowerState": [0, 1],
+    "ErrorCode": [0, 200, 201, 202, 203, 999],
+    "AlarmCode": [0, 20, 21, 22, 99],
+    "Estop": [0, 1],
+    "JamDetected": [0, 1]
+  },
+  "Line_01": {
+    "TotalCount": [0, 1, 2, 3, 4, 5],
+    "GoodCount": [0, 1, 2, 3, 4, 5],
+    "RejectCount": [0, 1, 2, 3, 4, 5]
+  }
+}
