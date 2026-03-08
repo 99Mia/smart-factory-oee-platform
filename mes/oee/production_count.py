@@ -4,23 +4,25 @@ from datetime import datetime
 import os
 import re
 
-# 1. JSONL 파일 읽기
 current_dir = os.path.dirname(__file__)
 file_path = os.path.join(
     current_dir,
-    "../../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.jsonl"
+    "../../../edge/processed_topic_samples/plc_processed_cnc_toolchange_s01.json"
+    # "../../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.json"
+    # "../../../edge/processed_topic_samples/plc_processed_line_jam_s03.json"
 )
 
-data = []
+# JSON 배열 그대로 읽기
 with open(file_path, "r", encoding="utf-8") as f:
-    content = f.read()
+    data = json.load(f)
 
-# 2. 각 JSON 객체 추출 (멀티라인 지원)
-matches = re.findall(r'\{.*?\}(?=\s*\{|\s*$)', content, flags=re.DOTALL)
-for match in matches:
-    obj = json.loads(match)
-    obj["timestamp"] = datetime.fromisoformat(obj["timestamp"].replace("Z", "+00:00"))
-    data.append(obj)
+# timestamp를 datetime으로 변환
+for obj in data:
+    ts_str = obj.get("timestamp")
+    if ts_str:
+        obj["timestamp"] = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+    else:
+        obj["timestamp"] = None
 
 # 3. DataFrame 변환
 df = pd.DataFrame(data)

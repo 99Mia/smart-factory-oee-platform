@@ -5,29 +5,36 @@ import os
 import re
 
 # ============================================
-# 1. JSONL 읽기
+# 1. JSON 읽기
 # ============================================
 
 current_dir = os.path.dirname(__file__)
 file_path = os.path.join(
     current_dir,
-    "../../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.jsonl"
+    "../../../edge/processed_topic_samples/plc_processed_cnc_toolchange_s01.json"
+    # "../../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.json"
+    # "../../../edge/processed_topic_samples/plc_processed_line_jam_s03.json"
 )
 
-data = []
+# JSON 배열 그대로 읽기
 with open(file_path, "r", encoding="utf-8") as f:
-    content = f.read()
+    data = json.load(f)
 
-matches = re.findall(r'\{.*?\}(?=\s*\{|\s*$)', content, flags=re.DOTALL)
+# timestamp를 datetime으로 변환
+for obj in data:
+    ts_str = obj.get("timestamp")
+    if ts_str:
+        obj["timestamp"] = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+    else:
+        obj["timestamp"] = None
 
-for match in matches:
-    obj = json.loads(match)
-    obj["timestamp"] = datetime.fromisoformat(
-        obj["timestamp"].replace("Z", "+00:00")
-    )
-    data.append(obj)
-
+# DataFrame 생성
 df = pd.DataFrame(data)
+
+# timestamp 없는 행 제거
+df = df[df["timestamp"].notna()].copy()
+
+# 정렬
 df.sort_values("timestamp", inplace=True)
 df.reset_index(drop=True, inplace=True)
 
