@@ -19,6 +19,7 @@ equipmentId별로 In-Memory State를 유지한다.
 - currentJobId (MES 수신)
 - currentProductId (MES 수신)
 - currentLotId (MES 수신)
+- currentRecipeId (MES 수신)
 
 ### 2.1 MES 작업지시 동기화
 Edge는 MES로부터 jobId, productId, lotId를 수신한다.
