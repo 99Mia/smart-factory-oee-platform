@@ -5,17 +5,17 @@
 - [시스템 구성](#시스템-구성)
 - [주요 시나리오](#주요-시나리오)
 - [데이터 및 분석](#데이터-및-분석)
-- [AI/확장 가능성](#aI확장-가능성)
+- [이상 감지](#이상-감지)
 - [기술 스택](#기술-스택)
 - [프로젝트 핵심 성과](#프로젝트-핵심-성과)
 
 ---
 
 ## 프로젝트 개요
-- **목적**: 가상 공장을 기반으로 제조 데이터 수집 및 분석을 통해 OEE(Overall Equipment Effectiveness)를 개선하고, 이벤트 기반 이상 감지 및 AI 적용 가능성을 검증
+- **목적**: 가상 공장을 기반으로 제조 데이터를 기반으로 OEE(Overall Equipment Effectiveness)를 개선하고, 이벤트 기반 이상 감지 및 AI 적용 가능성을 검증
 - **주요 목표**:
   - CNC, 컨베이어, Vision 검사기 연계 생산 라인 시뮬레이션
-  - 이벤트 기반 데이터 수집 및 Kafka 스트리밍 처리
+  - 이벤트 기반 데이터 생성 및 Kafka 스트리밍 처리
   - 생산 및 품질 데이터를 활용한 OEE 산출
   - 이상 상황 시나리오 기반 성능 평가 및 AI 모델 설계 가능성 검증
 
@@ -70,12 +70,25 @@
 
 ---
 
-## AI/확장 가능성
-- 현재 AI 모델은 미구현
-- 설계 아이디어:
-  - 규칙 기반 + 통계 기반 생산 이상 감지
-  - 이벤트 데이터만으로 Jam 위험, Reject 급증 등 예측
-- Feature Topic 확장 가능성으로 향후 **AI 기반 제조 최적화** 검증 가능
+## 이상 감지 
+
+본 프로젝트에서는 생산 이벤트 데이터를 활용하여  
+**Rule-based + Statistical 기반 이상 감지 로직을 구현하였다.**
+
+- **Rule-based Detection**
+  - Reject 연속 발생 (Reject Streak ≥ 2)
+  - Cycle Time 기준 대비 10% 이상 증가
+
+- **Statistical Detection**
+  - Sliding Window 기반 Z-score 이상 탐지
+  - Feature: Production Interval, Reject Count, Alarm Count
+  - Threshold: |Z| > 2
+
+Rule 기반 이상 탐지와 통계 기반 탐지를 결합하여  
+**Hybrid Alert 방식으로 생산 이상을 탐지하도록 설계하였다.**
+
+향후 Kafka Stream에서 생성된 Feature 데이터를 활용하여  
+**Jam 예측, 품질 이상 예측, 설비 이상 탐지 등 AI 모델로 확장 가능하다.**
 
 ---
 
@@ -89,7 +102,8 @@
 ---
 
 ## 프로젝트 핵심 성과
-- 시뮬레이션 기반 OEE 계산 자동화
-- 이벤트 기반 품질/생산 모니터링 시스템 설계
-- 이상 상황 대응 시나리오별 성능 비교 → AI 적용 필요성 도출
-- 확장 가능한 Kafka 기반 이벤트 처리 구조 설계
+- 가상 제조 라인 기반 생산 이벤트 데이터 시뮬레이션 환경 구축
+- Kafka 기반 Event-driven 제조 데이터 파이프라인 설계
+- 생산 이벤트 데이터를 활용한 OEE 계산 로직 설계 (Downtime / Production Count 분석)
+- Rule-based + Statistical 기반 Hybrid 이상 감지 로직 구현
+- 생산 이벤트 데이터 기반 이상 상황 분석
