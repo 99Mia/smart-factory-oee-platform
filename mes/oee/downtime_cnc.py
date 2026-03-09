@@ -11,9 +11,9 @@ import re
 current_dir = os.path.dirname(__file__)
 file_path = os.path.join(
     current_dir,
-    "../../../edge/processed_topic_samples/plc_processed_cnc_toolchange_s01.json"
-    # "../../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.json"
-    # "../../../edge/processed_topic_samples/plc_processed_line_jam_s03.json"
+    # "../../edge/processed_topic_samples/plc_processed_cnc_toolchange_s01.json"
+    # "../../edge/processed_topic_samples/plc_processed_cnc_tooldelay_s02.json"
+    "../../edge/processed_topic_samples/plc_processed_line_jam_s03.json"
 )
 
 # JSON 배열 그대로 읽기
