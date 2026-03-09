@@ -425,7 +425,7 @@
   "currentState": "HOLD",
   "previousMode": null,
   "currentMode": null,
-  "durationSec": null,
+  "durationSec": 89,
   "alarmCode": null,
   "deltaTotal": null,
   "deltaGood": null,
