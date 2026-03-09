@@ -8,16 +8,17 @@
 - [이상 감지](#이상-감지)
 - [기술 스택](#기술-스택)
 - [프로젝트 핵심 성과](#프로젝트-핵심-성과)
+- [트러블 슈팅](#트러블슈팅-요약)
 
 ---
 
 ## 프로젝트 개요
-- **목적**: 가상 공장을 기반으로 제조 데이터를 기반으로 OEE(Overall Equipment Effectiveness)를 개선하고, 이벤트 기반 이상 감지 및 AI 적용 가능성을 검증
+- **목적**: 가상 공장 기반 제조 데이터를 활용하여 OEE(Overall Equipment Effectiveness)를 개선하고, 이벤트 기반 이상 감지 및 AI 적용 가능성을 검증
 - **주요 목표**:
   - CNC, 컨베이어, Vision 검사기 연계 생산 라인 시뮬레이션
   - 이벤트 기반 데이터 생성 및 Kafka 스트리밍 처리
-  - 생산 및 품질 데이터를 활용한 OEE 산출
-  - 이상 상황 시나리오 기반 성능 평가 및 AI 모델 설계 가능성 검증
+  - OEE 산출 및 이상 상황 시나리오 기반 성능 평가를 통한 AI 모델 설계 가능성 검증
+  - 생산·품질 데이터 기반 이상 감지 로직(Rule-based + Statistical) 구현
 
 ---
 
@@ -29,10 +30,10 @@
   - 제품 1개 가공 후 품질 검사 완료까지 **총 4분 소요**
 
 - **데이터 흐름**:
-  1. **PLC → Edge**: 표준 PLC Tag를 기반으로 Raw Event 생성 (`plc_raw_topic.avsc`)
-  2. **Edge → Kafka Raw Topic**: EquipmentId를 Partition Key로 직렬화
-  3. **Edge → Processed Topic**: MES에서 받은 ProductId, JobId, LotId 포함, 상태 변화 이벤트만 생성
-  4. MES 및 Kafka Stream에서 구독:
+  - **PLC → Edge**: 표준 PLC Tag를 기반으로 Raw Event 생성
+  - **Edge → Kafka Raw Topic**: EquipmentId를 Partition Key로 직렬화
+  - **Edge → Processed Topic**: MES에서 받은 ProductId, JobId, LotId 포함, 상태 변화 이벤트만 생성
+  - MES와 Kafka Streams이 Processed Topic에서 데이터를 수신하여 처리:
      - MES → OEE 계산
      - Kafka Stream → Feature Topic 생성 (향후 AI 모델 활용)
 
@@ -40,7 +41,14 @@
  ![전체 아키텍처](./docs/architecture.png)  
 
 - **지원 문서/스키마**:
-  - `plc_tag_definition.md` / `raw_topic_schema.md` / `processed_topic_schema.md` / `edge_transition_design.md`
+  - [plc_tag_definition.md](docs/plc_tag_definition.md)
+  - [raw_topic_schema.md](docs/raw_topic_schema.md)
+  - [processed_topic_schema.md](docs/processed_topic_schema.md)
+  - [feature_topic_schema.md](docs/feature_topic_schema.md)
+  - [edge_transition_design.md](docs/edge_transition_design.md)
+  - [feature_generation_logic.md](docs/feature_generation_logic.md)
+  - [plc_raw_topic.avsc](edge/avro_schemas/plc_raw_topic.avsc)
+  - [plc_processed_topic.avsc](edge/avro_schemas/plc_processed_topic.avsc)
 
 ---
 
@@ -48,7 +56,7 @@
 1. **Tool Change – 즉시 대응**
    - CNC Tool Change Required 알람 발생 후 작업자가 즉시 대응
    - 알람 발생 시점부터 가공 중 제품은 **격리(Isolated Production)** 처리
-   - 시험 가공 후 Vision 검사로 품질 확인, OEE 계산 완료
+   - 시험 가공 후 Vision 검사로 품질 확인, OEE 계산
 
 2. **Tool Change – 지연 대응**
    - 경고 알람 발생에도 CNC 가공 지속 → 작업자 늦게 대응
@@ -73,7 +81,7 @@
 ## 이상 감지 
 
 본 프로젝트에서는 생산 이벤트 데이터를 활용하여  
-**Rule-based + Statistical 기반 이상 감지 로직을 구현하였다.**
+**Rule-based + Statistical 기반 이상 감지 로직을 구현**
 
 - **Rule-based Detection**
   - Reject 연속 발생 (Reject Streak ≥ 2)
@@ -85,10 +93,10 @@
   - Threshold: |Z| > 2
 
 Rule 기반 이상 탐지와 통계 기반 탐지를 결합하여  
-**Hybrid Alert 방식으로 생산 이상을 탐지하도록 설계하였다.**
+**Hybrid Alert 방식으로 생산 이상을 탐지하도록 설계**
 
 향후 Kafka Stream에서 생성된 Feature 데이터를 활용하여  
-**Jam 예측, 품질 이상 예측, 설비 이상 탐지 등 AI 모델로 확장 가능하다.**
+**Jam 예측, 품질 이상 예측, 설비 이상 탐지 등 AI 모델로 확장 가능**
 
 ---
 
@@ -107,3 +115,19 @@ Rule 기반 이상 탐지와 통계 기반 탐지를 결합하여
 - 생산 이벤트 데이터를 활용한 OEE 계산 로직 설계 (Downtime / Production Count 분석)
 - Rule-based + Statistical 기반 Hybrid 이상 감지 로직 구현
 - 생산 이벤트 데이터 기반 이상 상황 분석
+
+---
+
+## 트러블슈팅 요약
+
+1. **Kafka 이벤트 순서 문제**
+   - **문제:** Partition이 달라지면 동일 설비 이벤트 순서 보장 불가 → OEE, Cycle Time 계산 오류
+   - **해결:** EquipmentId를 Partition Key로 사용, 설비 기준 OEE/이상 탐지 로직 구성
+
+2. **OEE Downtime 기준**
+   - **문제:** Micro Stop, Jam 등 다양한 정지 이벤트 기준 없으면 Availability 계산 불일치
+   - **해결:** 기준 Cycle Time 대비 120% 지연 시 Downtime, Micro Stop/Jam 구분
+
+3. **Jam 이상 탐지 False Positive**
+   - **문제:** 단순 Threshold 탐지 → 자연 변동에도 알람 발생
+   - **해결:** Sliding Window Z-score + Production Interval/Reject Count 사용, Rule 기반과 Hybrid 구조 설계
