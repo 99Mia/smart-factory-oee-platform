@@ -1,4 +1,4 @@
-# AI 기반 제조 데이터 분석 및 OEE 개선 프로젝트
+# 스마트팩토리 데이터 기반 공정 시뮬레이션 및 OEE 개선 프로젝트
 
 ## 목차
 - [프로젝트 개요](#프로젝트-개요)
@@ -8,7 +8,6 @@
 - [이상 감지](#이상-감지)
 - [기술 스택](#기술-스택)
 - [프로젝트 핵심 성과](#프로젝트-핵심-성과)
-- [트러블 슈팅](#트러블슈팅-요약)
 
 ---
 
@@ -116,18 +115,4 @@ Rule 기반 이상 탐지와 통계 기반 탐지를 결합하여
 - Rule-based + Statistical 기반 Hybrid 이상 감지 로직 구현
 - 생산 이벤트 데이터 기반 이상 상황 분석
 
----
 
-## 트러블슈팅 요약
-
-1. **Kafka 이벤트 순서 문제**
-   - **문제:** Partition이 달라지면 동일 설비 이벤트 순서 보장 불가 → OEE, Cycle Time 계산 오류
-   - **해결:** EquipmentId를 Partition Key로 사용, 설비 기준 OEE/이상 탐지 로직 구성
-
-2. **OEE Downtime 기준**
-   - **문제:** Micro Stop, Jam 등 다양한 정지 이벤트 기준 없으면 Availability 계산 불일치
-   - **해결:** 기준 Cycle Time 대비 120% 지연 시 Downtime, Micro Stop/Jam 구분
-
-3. **Jam 이상 탐지 False Positive**
-   - **문제:** 단순 Threshold 탐지 → 자연 변동에도 알람 발생
-   - **해결:** Sliding Window Z-score + Production Interval/Reject Count 사용, Rule 기반과 Hybrid 구조 설계
