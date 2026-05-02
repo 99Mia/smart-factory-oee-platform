@@ -86,6 +86,8 @@ Convert events into measurable signals:
 - alarm frequency (system instability)  
 - hold / idle ratios (flow disruption)  
 
+[Feature Topic Logic](notebooks/feature_topic/feature_topic_tooldelay_s02.ipynb)
+
 ---
 
 ### 3. Hybrid Detection
@@ -107,20 +109,25 @@ combined_alert = rule_alert or stat_alert
 - Statistical → captures early deviations  
 - Combined → enables early and reliable detection  
 
+[Detection Logic](notebooks/anomaly_detection/anomaly_detection_tooldelay_s02.ipynb)
 
 ---
 
 ## Scenarios (Interactive)
 
-Timely Response
-https://99Mia.github.io/smart-factory-oee-platform/docs/toolchange_s01_timeline.html  
+### Timely Response 
+📊 [View Timeline](https://99Mia.github.io/smart-factory-oee-platform/toolchange_s01_timeline.html)
+📓 [State Reconstruction Notebook](notebooks/analytics/state_timeline_s01.ipynb)
 
-Delayed Response  
-https://99Mia.github.io/smart-factory-oee-platform/docs/tooldelay_s02_timeline.html  
+### Delayed Response 
+📊 [View Timeline](https://99Mia.github.io/smart-factory-oee-platform/tooldelay_s02_timeline.html) 
+📓 [State Reconstruction Notebook](notebooks/analytics/state_timeline_s02.ipynb)
 
-Line Jam  
-https://99Mia.github.io/smart-factory-oee-platform/docs/cnc_line_jam_timeline_03.html  
-https://99Mia.github.io/smart-factory-oee-platform/docs/conveyor_line_jam_03_timeline.html  
+
+### Line Jam 
+📊 [CNC Timeline](https://99Mia.github.io/smart-factory-oee-platform/cnc_line_jam_timeline_03.html) 
+📊 [Conveyor Timeline](https://99Mia.github.io/smart-factory-oee-platform/conveyor_line_jam_03_timeline.html)
+📓 [State Reconstruction Notebook](notebooks/analytics/state_timeline_s03.ipynb)
 
 ---
 
@@ -138,4 +145,4 @@ Kafka · Python · Pandas · Plotly · PLC / MES
 
 ## Docs
 
-https://github.com/99Mia/smart-factory-oee-platform/tree/master/docs
+[Detailed Documentation](docs/)
