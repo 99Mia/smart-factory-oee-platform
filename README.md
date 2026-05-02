@@ -1,170 +1,141 @@
-# Event-Driven Anomaly Detection for Smart Manufacturing
+# Smart Factory OEE & Event-Driven Anomaly Detection
 
 Detect anomalies before production loss.
 
 ---
 
-## Overview
+## Problem
 
-This project simulates a smart factory production line and demonstrates how **event-driven manufacturing data** can be used to:
+Production loss is not caused by anomalies themselves,  
+but by **late detection**.
 
-- reconstruct production behavior
-- compute OEE (Overall Equipment Effectiveness)
-- detect anomalies **before quality degradation becomes visible**
-
-> Production loss is not caused by anomalies themselves,  
-> but by **when they are detected and handled**.
+- Raw PLC data does not show system behavior directly  
+- Early signals exist but are hidden in event data  
 
 ---
 
-## System Architecture
+## What This Project Does
 
+Builds an **event-driven manufacturing pipeline** that:
+
+- transforms raw PLC signals into structured production events  
+- reconstructs production flow from event sequences  
+- derives OEE from actual system behavior  
+- generates feature-level signals from production dynamics  
+- detects anomalies before they impact production outcomes   
+
+---
+
+## System Flow
+
+```
+PLC → Edge → Kafka → MES → Feature → Detection → Visualization
+```
 ![architecture](docs/architecture.png)
 
-- PLC → Edge → Kafka → MES / Stream Processing  
-- Raw → Processed → Feature Topic pipeline  
-- Feature-based architecture for anomaly detection and AI extension  
+This pipeline transforms raw PLC signals into structured production behavior and detection signals.
 
 ---
 
-## Key Concepts
+## Challenge
 
-### 1. State Reconstruction
+### PLC Data Limitation
 
-PLC generates discrete events.  
-We reconstruct continuous system states from these events.
+PLC systems provide discrete event signals, not continuous system behavior.
 
-👉 [State Timeline](https://99Mia.github.io/smart-factory-oee-platform/state_timeline_s02.html)
+- Only state change events are recorded
+- System state exists only implicitly between events
+- Production flow cannot be directly observed from raw data
+
+→ System behavior must be reconstructed from event sequences
+
+---
+
+### Detection Limitation
+
+Detecting anomalies in manufacturing is not just about identifying abnormal conditions.
+
+The real challenge is:
+
+> Detecting them early enough to prevent production impact
+
+- Rule-based detection identifies clear failures, but only after the system has degraded
+- Statistical detection captures subtle changes, but is often unstable in noisy event data
+- Neither approach alone can reliably detect early-stage anomalies
+
+→ Effective detection requires capturing both early signals and reliable conditions
+
+---
+
+## Solution
+
+### 1. Behavior Reconstruction
+Transform event logs into production flow
+
+- Connect state transitions over time  
+- Derive production intervals and durations  
+- Reconstruct continuous system behavior  
+
+---
+
+### 2. Feature Transformation
+Convert events into measurable signals:
+
+- production interval (speed change)  
+- reject rate / streak (quality degradation)  
+- alarm frequency (system instability)  
+- hold / idle ratios (flow disruption)  
+
+---
+
+### 3. Hybrid Detection
+Detection combines domain rules and statistical signals.
 
 ```python
-df["state"] = df["state"].ffill()
-df["interval"] = df["timestamp"].diff()
+rule_alert = (
+    (reject_streak >= 2) or
+    (cycle_time_avg > baseline * 1.1) or
+    (hold_rate > threshold)
+)
+
+stat_alert = abs(z_score) > 2
+
+combined_alert = rule_alert or stat_alert
 ```
 
----
+- Rule-based → captures confirmed failure patterns  
+- Statistical → captures early deviations  
+- Combined → enables early and reliable detection  
 
-### 2. Flow-Based System Behavior
-
-Anomalies propagate across the production line.
-
-👉 [CNC Timeline](https://99Mia.github.io/smart-factory-oee-platform/cnc_line_jam_timeline_03.html)  
-👉 [Conveyor Timeline](https://99Mia.github.io/smart-factory-oee-platform/conveyor_line_jam_03_timeline.html)
 
 ---
 
-### 3. Early Signal Detection
+## Scenarios (Interactive)
 
-Early anomaly signals appear before visible quality degradation.
+Timely Response
+https://99Mia.github.io/smart-factory-oee-platform/docs/toolchange_s01_timeline.html  
 
-👉 [Anomaly Signals](https://99Mia.github.io/smart-factory-oee-platform/tooldelay_s02_timeline.html)
+Delayed Response  
+https://99Mia.github.io/smart-factory-oee-platform/docs/tooldelay_s02_timeline.html  
 
-```python
-df["interval_std"] = df["interval"].rolling(5).std()
-df["reject_streak"] = (df["reject"] == 1).groupby((df["reject"] != 1).cumsum()).cumsum()
-```
-
----
-
-### 4. Hybrid Detection Logic
-
-Rule-based + Statistical detection combined.
-
-👉 [Detection Logic](https://99Mia.github.io/smart-factory-oee-platform/toolchange_s01_timeline.html)
-
-```python
-z = (x - x.mean()) / x.std()
-alert = (reject_streak >= 2) or (abs(z) > 2)
-```
+Line Jam  
+https://99Mia.github.io/smart-factory-oee-platform/docs/cnc_line_jam_timeline_03.html  
+https://99Mia.github.io/smart-factory-oee-platform/docs/conveyor_line_jam_03_timeline.html  
 
 ---
 
-## Scenarios
+## Key Insight
 
-### Tool Change (Immediate vs Delayed)
-- Immediate response prevents quality loss  
-- Delayed response increases reject rate  
-
-### Line Jam
-- Conveyor issues propagate upstream  
-- Entire production line affected  
-
----
-
-## Data Pipeline & Processing
-
-- PLC → Edge: Raw event generation  
-- Edge → Kafka: Raw Topic (EquipmentId partitioning)  
-- Kafka → Processed Topic: State change events  
-- Kafka Stream → Feature Topic: Feature generation for AI  
-
----
-
-## OEE & Analysis
-
-- Availability, Production Count, Reject Ratio  
-- Downtime analysis using AlarmCode mapping  
-- Cycle time baseline comparison  
-
----
-
-## Core Implementation
-
-### Event → State Reconstruction
-```python
-df["state"] = df["state"].ffill()
-df["duration"] = df["timestamp"].diff()
-```
-
-### Feature Engineering
-```python
-df["interval"] = df["timestamp"].diff()
-df["reject_rate"] = df["reject"].rolling(5).mean()
-df["alarm_count"] = df["alarm"].rolling(5).sum()
-```
-
-### Hybrid Detection
-```python
-rule = (reject_streak >= 2)
-stat = abs(z_score) > 2
-alert = rule or stat
-```
-
----
-
-## Design Decisions
-
-- Event-driven architecture for manufacturing data  
-- Feature-based anomaly detection approach  
-- Hybrid detection (rule + statistical) for robustness  
+> Production loss is determined by **timing, not anomalies**
 
 ---
 
 ## Tech Stack
 
-- Kafka / Avro / Schema Registry  
-- Python / Pandas  
-- Kafka Streams  
-- PLC / Edge / MES  
-- Plotly (Interactive Visualization)  
+Kafka · Python · Pandas · Plotly · PLC / MES  
 
 ---
 
-## Project Highlights
+## Docs
 
-- Event-driven smart factory simulation  
-- OEE calculation and production analysis  
-- Hybrid anomaly detection system  
-- AI-ready feature pipeline  
-
----
-
-## Detailed Documentation
-
-For full system design and schema definitions:
-
-- docs/plc_tag_definition.md  
-- docs/raw_topic_schema.md  
-- docs/processed_topic_schema.md  
-- docs/feature_topic_schema.md  
-- docs/edge_transition_design.md  
-- docs/feature_generation_logic.md  
+https://github.com/99Mia/smart-factory-oee-platform/tree/master/docs
